@@ -198,15 +198,25 @@ router.delete(
   (req, res) => {
     Post.findById(req.params.id)
       .then(post => {
+        // Filter comments for array containing requested comment
+        const commentArray = post.comments.filter(
+          comment => comment._id.toString() === req.params.comment_id
+        );
+
         // Check if comment exists
-        if (
-          post.comments.filter(
-            comment => comment._id.toString() === req.params.comment_id
-          ).length === 0
-        ) {
+        if (commentArray.length === 0) {
           return res
             .status(404)
             .json({ comment_not_exists: 'Comment does not exist.' });
+        }
+        // Check if comment belongs to current user
+        const commentOwner = commentArray.map(comment =>
+          comment.user.toString()
+        )[0];
+        if (req.user.id !== commentOwner) {
+          return res.status(403).json({
+            unauthorized: 'User not authorized to delete this comment.'
+          });
         }
 
         // Get remove index
