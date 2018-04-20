@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../../actions/authActions';
@@ -73,6 +74,9 @@ class Login extends Component {
                 />
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
+              <p className="mt-4">
+                Not yet a member? <Link to="/register">Sign Up!</Link>
+              </p>
             </div>
           </div>
         </div>
